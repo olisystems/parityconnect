@@ -2,23 +2,23 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-
-// set up server
-
 const app = express();
-const port = 80;
-app.listen(process.env.PORT || port);
-console.log('\n local server is running on port ' + port + '!');
 
-// set up app
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 
-// public folder for static files
 
 app.use(express.static('dist'));
-
-// enable body parsing for json format
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
+// set up server
+
+io.on('connection', () => {
+  console.log('a user is connected')
+})
+
+var server = http.listen(3001, () => {
+  console.log('server is running on port', server.address().port);
+});
